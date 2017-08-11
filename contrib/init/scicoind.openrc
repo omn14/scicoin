@@ -1,0 +1,92 @@
+#!/sbin/runscript
+
+# backward compatibility for existing gentoo layout 
+#
+if [ -d "/var/lib/scicoin/.scicoin" ]; then
+	SCICOIND_DEFAULT_DATADIR="/var/lib/scicoin/.scicoin"
+else
+	SCICOIND_DEFAULT_DATADIR="/var/lib/scicoind"
+fi
+
+SCICOIND_CONFIGFILE=${SCICOIND_CONFIGFILE:-/etc/scicoin/scicoin.conf}
+SCICOIND_PIDDIR=${SCICOIND_PIDDIR:-/var/run/scicoind}
+SCICOIND_PIDFILE=${SCICOIND_PIDFILE:-${SCICOIND_PIDDIR}/scicoind.pid}
+SCICOIND_DATADIR=${SCICOIND_DATADIR:-${SCICOIND_DEFAULT_DATADIR}}
+SCICOIND_USER=${SCICOIND_USER:-${SCICOIN_USER:-scicoin}}
+SCICOIND_GROUP=${SCICOIND_GROUP:-scicoin}
+SCICOIND_BIN=${SCICOIND_BIN:-/usr/bin/scicoind}
+SCICOIND_NICE=${SCICOIND_NICE:-${NICELEVEL:-0}}
+SCICOIND_OPTS="${SCICOIND_OPTS:-${SCICOIN_OPTS}}"
+
+name="Scicoin Core Daemon"
+description="Scicoin cryptocurrency P2P network daemon"
+
+command="/usr/bin/scicoind"
+command_args="-pid=\"${SCICOIND_PIDFILE}\" \
+		-conf=\"${SCICOIND_CONFIGFILE}\" \
+		-datadir=\"${SCICOIND_DATADIR}\" \
+		-daemon \
+		${SCICOIND_OPTS}"
+
+required_files="${SCICOIND_CONFIGFILE}"
+start_stop_daemon_args="-u ${SCICOIND_USER} \
+			-N ${SCICOIND_NICE} -w 2000"
+pidfile="${SCICOIND_PIDFILE}"
+
+# The retry schedule to use when stopping the daemon. Could be either
+# a timeout in seconds or multiple signal/timeout pairs (like
+# "SIGKILL/180 SIGTERM/300")
+retry="${SCICOIND_SIGTERM_TIMEOUT}"
+
+depend() {
+	need localmount net
+}
+
+# verify
+# 1) that the datadir exists and is writable (or create it)
+# 2) that a directory for the pid exists and is writable
+# 3) ownership and permissions on the config file
+start_pre() {
+	checkpath \
+	-d \
+	--mode 0750 \
+	--owner "${SCICOIND_USER}:${SCICOIND_GROUP}" \
+	"${SCICOIND_DATADIR}"
+
+	checkpath \
+	-d \
+	--mode 0755 \
+	--owner "${SCICOIND_USER}:${SCICOIND_GROUP}" \
+	"${SCICOIND_PIDDIR}"
+
+	checkpath -f \
+	-o ${SCICOIND_USER}:${SCICOIND_GROUP} \
+	-m 0660 \
+	${SCICOIND_CONFIGFILE}
+
+	checkconfig || return 1
+}
+
+checkconfig()
+{
+	if ! grep -qs '^rpcpassword=' "${SCICOIND_CONFIGFILE}" ; then
+		eerror ""
+		eerror "ERROR: You must set a secure rpcpassword to run scicoind."
+		eerror "The setting must appear in ${SCICOIND_CONFIGFILE}"
+		eerror ""
+		eerror "This password is security critical to securing wallets "
+		eerror "and must not be the same as the rpcuser setting."
+		eerror "You can generate a suitable random password using the following"
+		eerror "command from the shell:"
+		eerror ""
+		eerror "bash -c 'tr -dc a-zA-Z0-9 < /dev/urandom | head -c32 && echo'"
+		eerror ""
+		eerror "It is also recommended that you also set alertnotify so you are "
+		eerror "notified of problems:"
+		eerror ""
+		eerror "ie: alertnotify=echo %%s | mail -s \"Scicoin Alert\"" \
+			"admin@foo.com"
+		eerror ""
+		return 1
+	fi
+}

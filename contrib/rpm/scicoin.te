@@ -1,0 +1,81 @@
+policy_module(scicoin, 1.100.1)
+
+########################################
+#
+# Declarations
+#
+
+type scicoin_t;
+type scicoin_exec_t;
+init_daemon_domain(scicoin_t, scicoin_exec_t)
+
+permissive scicoin_t;
+
+type scicoin_initrc_exec_t;
+init_script_file(scicoin_initrc_exec_t)
+
+type scicoin_conf_t;
+files_type(scicoin_conf_t)
+
+type scicoin_var_lib_t;
+files_type(scicoin_var_lib_t)
+
+type scicoin_var_run_t;
+files_type(scicoin_var_run_t)
+
+type scicoin_port_t;
+corenet_port(scicoin_port_t)
+
+########################################
+#
+# scicoin local policy
+#
+allow scicoin_t self:process { fork };
+
+allow scicoin_t self:fifo_file rw_fifo_file_perms;
+allow scicoin_t self:unix_stream_socket create_stream_socket_perms;
+
+manage_dirs_pattern(scicoin_t, scicoin_conf_t, scicoin_conf_t)
+manage_files_pattern(scicoin_t, scicoin_conf_t, scicoin_conf_t)
+
+manage_dirs_pattern(scicoin_t, scicoin_var_lib_t, scicoin_var_lib_t)
+manage_files_pattern(scicoin_t, scicoin_var_lib_t, scicoin_var_lib_t)
+files_var_lib_filetrans(scicoin_t, scicoin_var_lib_t, { dir file })
+
+manage_dirs_pattern(scicoin_t, scicoin_var_run_t, scicoin_var_run_t)
+manage_files_pattern(scicoin_t, scicoin_var_run_t, scicoin_var_run_t)
+
+sysnet_dns_name_resolve(scicoin_t)
+corenet_all_recvfrom_unlabeled(scicoin_t)
+
+allow scicoin_t self:tcp_socket create_stream_socket_perms;
+corenet_tcp_sendrecv_generic_if(scicoin_t)
+corenet_tcp_sendrecv_generic_node(scicoin_t)
+corenet_tcp_sendrecv_all_ports(scicoin_t)
+corenet_tcp_bind_generic_node(scicoin_t)
+
+gen_require(`
+    type scicoin_port_t;
+')
+allow scicoin_t scicoin_port_t:tcp_socket name_bind;
+
+gen_require(`
+    type scicoin_port_t;
+')
+allow scicoin_t scicoin_port_t:tcp_socket name_connect;
+
+domain_use_interactive_fds(scicoin_t)
+
+files_read_etc_files(scicoin_t)
+
+miscfiles_read_localization(scicoin_t)
+
+sysnet_dns_name_resolve(scicoin_t)
+
+allow scicoin_t scicoin_exec_t:file execute_no_trans;
+allow scicoin_t self:process setsched;
+corecmd_exec_ls(scicoin_t)
+corenet_tcp_connect_http_port(scicoin_t)
+dev_read_urand(scicoin_t)
+fs_getattr_xattr_fs(scicoin_t)
+kernel_read_system_state(scicoin_t)

@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Scicoin Core
+Comment=Connect to the Scicoin P2P Network
+Comment[de]=Verbinde mit dem Scicoin peer-to-peer Netzwerk
+Comment[fr]=Scicoin, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=Scicoin, eşten eşe kriptografik sanal para birimi
+Exec=scicoin-qt %u
+Terminal=false
+Type=Application
+Icon=scicoin128
+MimeType=x-scheme-handler/scicoin;
+Categories=Office;Finance;

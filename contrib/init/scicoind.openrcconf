@@ -1,0 +1,33 @@
+# /etc/conf.d/scicoind: config file for /etc/init.d/scicoind
+
+# Config file location
+#SCICOIND_CONFIGFILE="/etc/scicoin/scicoin.conf"
+
+# What directory to write pidfile to?  (created and owned by $SCICOIND_USER)
+#SCICOIND_PIDDIR="/var/run/scicoind"
+
+# What filename to give the pidfile
+#SCICOIND_PIDFILE="${SCICOIND_PIDDIR}/scicoind.pid"
+
+# Where to write scicoind data (be mindful that the blockchain is large)
+#SCICOIND_DATADIR="/var/lib/scicoind"
+
+# User and group to own scicoind process
+#SCICOIND_USER="scicoin"
+#SCICOIND_GROUP="scicoin"
+
+# Path to scicoind executable
+#SCICOIND_BIN="/usr/bin/scicoind"
+
+# Nice value to run scicoind under
+#SCICOIND_NICE=0
+
+# Additional options (avoid -conf and -datadir, use flags above)
+#SCICOIND_OPTS=""
+
+# The timeout in seconds OpenRC will wait for scicoind to terminate
+# after a SIGTERM has been raised.
+# Note that this will be mapped as argument to start-stop-daemon's
+# '--retry' option, which means you can specify a retry schedule
+# here. For more information see man 8 start-stop-daemon.
+SCICOIND_SIGTERM_TIMEOUT=60

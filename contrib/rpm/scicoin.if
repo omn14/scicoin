@@ -1,0 +1,157 @@
+
+## <summary>policy for scicoin</summary>
+
+
+########################################
+## <summary>
+##	Transition to scicoin.
+## </summary>
+## <param name="domain">
+## <summary>
+##	Domain allowed to transition.
+## </summary>
+## </param>
+#
+interface(`scicoin_domtrans',`
+	gen_require(`
+		type scicoin_t, scicoin_exec_t;
+	')
+
+	corecmd_search_bin($1)
+	domtrans_pattern($1, scicoin_exec_t, scicoin_t)
+')
+
+
+########################################
+## <summary>
+##	Execute scicoin server in the scicoin domain.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`scicoin_initrc_domtrans',`
+	gen_require(`
+		type scicoin_initrc_exec_t;
+	')
+
+	init_labeled_script_domtrans($1, scicoin_initrc_exec_t)
+')
+
+
+########################################
+## <summary>
+##	Search scicoin lib directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`scicoin_search_lib',`
+	gen_require(`
+		type scicoin_var_lib_t;
+	')
+
+	allow $1 scicoin_var_lib_t:dir search_dir_perms;
+	files_search_var_lib($1)
+')
+
+########################################
+## <summary>
+##	Read scicoin lib files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`scicoin_read_lib_files',`
+	gen_require(`
+		type scicoin_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	read_files_pattern($1, scicoin_var_lib_t, scicoin_var_lib_t)
+')
+
+########################################
+## <summary>
+##	Manage scicoin lib files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`scicoin_manage_lib_files',`
+	gen_require(`
+		type scicoin_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	manage_files_pattern($1, scicoin_var_lib_t, scicoin_var_lib_t)
+')
+
+########################################
+## <summary>
+##	Manage scicoin lib directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`scicoin_manage_lib_dirs',`
+	gen_require(`
+		type scicoin_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	manage_dirs_pattern($1, scicoin_var_lib_t, scicoin_var_lib_t)
+')
+
+
+########################################
+## <summary>
+##	All of the rules required to administrate
+##	an scicoin environment
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <param name="role">
+##	<summary>
+##	Role allowed access.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`scicoin_admin',`
+	gen_require(`
+		type scicoin_t;
+		type scicoin_initrc_exec_t;
+		type scicoin_var_lib_t;
+	')
+
+	allow $1 scicoin_t:process { ptrace signal_perms };
+	ps_process_pattern($1, scicoin_t)
+
+	scicoin_initrc_domtrans($1)
+	domain_system_change_exemption($1)
+	role_transition $2 scicoin_initrc_exec_t system_r;
+	allow $2 system_r;
+
+	files_search_var_lib($1)
+	admin_pattern($1, scicoin_var_lib_t)
+
+')
+

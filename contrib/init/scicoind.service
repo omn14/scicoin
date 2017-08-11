@@ -1,0 +1,22 @@
+[Unit]
+Description=Scicoin's distributed currency daemon
+After=network.target
+
+[Service]
+User=scicoin
+Group=scicoin
+
+Type=forking
+PIDFile=/var/lib/scicoind/scicoind.pid
+ExecStart=/usr/bin/scicoind -daemon -pid=/var/lib/scicoind/scicoind.pid \
+-conf=/etc/scicoin/scicoin.conf -datadir=/var/lib/scicoind -disablewallet
+
+Restart=always
+PrivateTmp=true
+TimeoutStopSec=60s
+TimeoutStartSec=2s
+StartLimitInterval=120s
+StartLimitBurst=5
+
+[Install]
+WantedBy=multi-user.target
