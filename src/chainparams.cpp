@@ -16,7 +16,7 @@
 
 //#include <bignum.h>
 
-//uint256 bnProofOfWorkLimit = uint256S("0x99999999999999999999999999999999");
+uint256 bnProofOfWorkLimit = uint256S("0x99999999999999999999999999999999");
 
 
 
@@ -334,8 +334,8 @@ public:
         nDefaultPort = 17333;
         nPruneAfterHeight = 1000;
 
-        genesis = CreateGenesisBlock(1497722655, 2, 0x207fffff, 1, 50 * COIN);
-
+        genesis = CreateGenesisBlock(1497722655, 3, 0x207fffff, 1, 50 * COIN);
+	
 /////////
 /*	consensus.hashGenesisBlock = uint256S("0x01");
 	if (true && genesis.GetHash() != consensus.hashGenesisBlock)
@@ -350,12 +350,23 @@ public:
             LogPrintf("new regnet genesis merkle root: %s\n", genesis.hashMerkleRoot.ToString().c_str());
             LogPrintf("new regnet genesis nonce: %s\n", std::to_string(genesis.nNonce));
             LogPrintf("new regnet genesis hash: %s\n", genesis.GetHash().ToString().c_str());
+	    printf("new regnet genesis merkle root: %s\n", genesis.hashMerkleRoot.ToString().c_str());
+            printf("new regnet genesis nonce: %s\n", std::to_string(genesis.nNonce));
+		std::cout << std::to_string(genesis.nNonce) << std::endl;
+            printf("new regnet genesis hash: %s\n", genesis.GetHash().ToString().c_str());
         }
 */
+	printf("new regnet genesis merkle root: %s\n", genesis.hashMerkleRoot.ToString().c_str());
+            printf("new regnet genesis nonce: %s\n", std::to_string(genesis.nNonce));
+                std::cout << std::to_string(genesis.nNonce) << std::endl;
+            printf("new regnet genesis hash: %s\n", genesis.GetHash().ToString().c_str());
 
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256S("0x0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206"));
-        assert(genesis.hashMerkleRoot == uint256S("0x4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b"));
+//        assert(consensus.hashGenesisBlock == uint256S("0x0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206"));
+//        assert(genesis.hashMerkleRoot == uint256S("0x4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b"));
+
+	assert(consensus.hashGenesisBlock == uint256S("0x2e546c0f082172f59769e125fb6bc7ece12e9f9219062341d8ac4c6aae355727"));
+	assert(genesis.hashMerkleRoot == uint256S("0xf08a91c9956ab0717561c06a5f94bd8e2ab72585a5893a9d3649dd676aa77f95"));
 
         vFixedSeeds.clear(); //!< Regtest mode doesn't have any fixed seeds.
         vSeeds.clear();      //!< Regtest mode doesn't have any DNS seeds.
