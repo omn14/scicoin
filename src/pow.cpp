@@ -78,14 +78,23 @@ bool CheckProofOfWork(uint256 hash, unsigned int nBits, const Consensus::Params&
     arith_uint256 bnTarget;
 
     bnTarget.SetCompact(nBits, &fNegative, &fOverflow);
-
+    std::cout << "sjekker pow" << std::endl;
     // Check range
-    if (fNegative || bnTarget == 0 || fOverflow || bnTarget > UintToArith256(params.powLimit))
+    if (fNegative || bnTarget == 0 || fOverflow || bnTarget > UintToArith256(params.powLimit)){
+	
+	
+	std::cout << "fNeg: " << fNegative << std::endl;
+	std::cout << "bnTarget: " << bnTarget.ToString() << std::endl;
+	std::cout << "fOwerflow: " << fOverflow << std::endl;
+	std::cout << "params.powlimit: "<< UintToArith256(params.powLimit).ToString() << std::endl;
         return false;
-
+	}
+	
     // Check proof of work matches claimed amount
-    if (UintToArith256(hash) > bnTarget)
+    if (UintToArith256(hash) > bnTarget){
+	std::cout<< "pow match claimed amount??\n"<<UintToArith256(hash).ToString() << std::endl;
         return false;
-
+	}
+    std::cout << "pow ok!"<< std::endl;
     return true;
 }

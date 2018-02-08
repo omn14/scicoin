@@ -111,6 +111,7 @@ bool CheckTxScriptsSanity(const CMutableTransaction& tx)
 bool DecodeHexTx(CMutableTransaction& tx, const std::string& strHexTx, bool fTryNoWitness)
 {
     if (!IsHex(strHexTx)) {
+	std::cout << "not hex" << strHexTx << std::endl;
         return false;
     }
 
@@ -133,10 +134,12 @@ bool DecodeHexTx(CMutableTransaction& tx, const std::string& strHexTx, bool fTry
     try {
         ssData >> tx;
         if (!ssData.empty()) {
-            return false;
+            	std::cout << "ssData empty" << std::endl;
+		return false;
         }
     }
     catch (const std::exception&) {
+	std::cout << "exception ..." << std::endl;
         return false;
     }
 

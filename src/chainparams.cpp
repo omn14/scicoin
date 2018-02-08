@@ -136,7 +136,7 @@ public:
 
             LogPrintf("old mainnet genesis hash:  %s\n", consensus.hashGenesisBlock.ToString().c_str());
             // deliberately empty for loop finds nonce value.
-            for(genesis.nNonce == 0; bnProofOfWorkLimit < genesis.GetHash() ; genesis.nNonce++){ std::cerr << genesis.nNonce <<std::endl;} 
+            for(genesis.nNonce == 0; bnProofOfWorkLimit < genesis.GetHash() ; genesis.nNonce++){ std::cerr << genesis.nNonce <<std::endl;}
             LogPrintf("new mainnet genesis merkle root: %s\n", genesis.hashMerkleRoot.ToString().c_str());
             LogPrintf("new mainnet genesis nonce: %s\n", std::to_string(genesis.nNonce));
             LogPrintf("new mainnet genesis hash: %s\n", genesis.GetHash().ToString().c_str());
@@ -148,7 +148,7 @@ public:
         assert(genesis.hashMerkleRoot == uint256S("0xf08a91c9956ab0717561c06a5f94bd8e2ab72585a5893a9d3649dd676aa77f95"));
 
         // Note that of those with the service bits flag, most only support a subset of possible options
-        
+
 	vFixedSeeds.clear();
 	vSeeds.clear();
 	//vSeeds.push_back(CDNSSeedData("scicoin.sipa.be", "seed.scicoin.sipa.be", true)); // Pieter Wuille, only supports x1, x5, x9, and xd
@@ -198,7 +198,7 @@ public:
         consensus.BIP34Hash = uint256S("0x0000000023b3a96d3484e5abb3755c413e7d41500f8e2a5c3f0dd01299cd8ef8");
         consensus.BIP65Height = 0;//setter til 0 // 00000000007f6655f22f98e72ed80d8b06dc761d5da09df0fa1dc4be4f861eb6
         consensus.BIP66Height = 0;//setter til 0 // 000000002104c8c45e99a8853285a3b592602a3ccde2b832481da85e9e4ba182
-        consensus.powLimit = uint256S("6fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks
         consensus.nPowTargetSpacing = 10 * 60;
         consensus.fPowAllowMinDifficultyBlocks = true;
@@ -223,7 +223,7 @@ public:
         consensus.nMinimumChainWork = uint256S("0x0");//setter til "0x0"
 
         // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("0x00000000f70e6997720c5f2650c56898854ea071dfe36d7a8d2e1691fb2167b3"); //changed to genesis hash ---//1079274
+        consensus.defaultAssumeValid = uint256S("0x03cdfd3ae9ef8d91b632e632c080e1b0ab29bc1efdfb7dc6eab9099115104676"); //changed to genesis hash ---//1079274
 
         pchMessageStart[0] = 0x37;
         pchMessageStart[1] = 0xfa;
@@ -232,7 +232,7 @@ public:
         nDefaultPort = 17222;
         nPruneAfterHeight = 1000;
 
-        genesis = CreateGenesisBlock(1497789053, 3301594160, 0x1d00ffff, 1, 50 * COIN);
+        genesis = CreateGenesisBlock(1497789053, 3301594160, 0x207fffff, 1, 50 * COIN);
 
 /////////
 /*	consensus.hashGenesisBlock = uint256S("0x01");
@@ -243,17 +243,27 @@ public:
             LogPrintf("old testnet genesis hash:  %s\n", consensus.hashGenesisBlock.ToString().c_str());
             // deliberately empty for loop finds nonce value.
         //    for(genesis.nNonce == 0; genesis.GetHash() > bnProofOfWorkLimit; genesis.nNonce++){ }
- 	for(genesis.nNonce == 0; bnProofOfWorkLimit < genesis.GetHash() ; genesis.nNonce++){ } 
+ 	for(genesis.nNonce == 0; bnProofOfWorkLimit < genesis.GetHash() ; genesis.nNonce++){ }
 
             LogPrintf("new testnet genesis merkle root: %s\n", genesis.hashMerkleRoot.ToString().c_str());
             LogPrintf("new testnet genesis nonce: %s\n", std::to_string(genesis.nNonce));
             LogPrintf("new testnet genesis hash: %s\n", genesis.GetHash().ToString().c_str());
-        }
+ 	    printf("new regnet genesis merkle root: %s\n", genesis.hashMerkleRoot.ToString().c_str());
+            printf("new regnet genesis nonce: %s\n", std::to_string(genesis.nNonce));
+                std::cout << std::to_string(genesis.nNonce) << std::endl;
+            printf("new regnet genesis hash: %s\n", genesis.GetHash().ToString().c_str());
+
+	}
 */
 
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256S("0x00000000f70e6997720c5f2650c56898854ea071dfe36d7a8d2e1691fb2167b3"));
-        assert(genesis.hashMerkleRoot == uint256S("0xf08a91c9956ab0717561c06a5f94bd8e2ab72585a5893a9d3649dd676aa77f95"));
+//        assert(consensus.hashGenesisBlock == uint256S("0x00000000f70e6997720c5f2650c56898854ea071dfe36d7a8d2e1691fb2167b3"));
+//        assert(genesis.hashMerkleRoot == uint256S("0xf08a91c9956ab0717561c06a5f94bd8e2ab72585a5893a9d3649dd676aa77f95"));
+        assert(consensus.hashGenesisBlock == uint256S("0x65c9687a9684028822015801e614bf19ea8568f9ebd61bc5ed7f9f49935eba29"));
+        assert(genesis.hashMerkleRoot == uint256S("0xb815a5152e54143384f0839787eb4eecd0d93d586c50ba05dc6bc8b3e4ef2e3d"));
+
+
+
 
         vFixedSeeds.clear();
         vSeeds.clear();
@@ -335,7 +345,7 @@ public:
         nPruneAfterHeight = 1000;
 
         genesis = CreateGenesisBlock(1497722655, 3, 0x207fffff, 1, 50 * COIN);
-	
+
 /////////
 /*	consensus.hashGenesisBlock = uint256S("0x01");
 	if (true && genesis.GetHash() != consensus.hashGenesisBlock)
@@ -345,8 +355,8 @@ public:
             LogPrintf("old regnet genesis hash:  %s\n", consensus.hashGenesisBlock.ToString().c_str());
             // deliberately empty for loop finds nonce value.
 //            for(genesis.nNonce == 0; genesis.GetHash() > bnProofOfWorkLimit; genesis.nNonce++){ }
-	for(genesis.nNonce == 0; bnProofOfWorkLimit < genesis.GetHash() ; genesis.nNonce++){ } 
- 
+	for(genesis.nNonce == 0; bnProofOfWorkLimit < genesis.GetHash() ; genesis.nNonce++){ }
+
             LogPrintf("new regnet genesis merkle root: %s\n", genesis.hashMerkleRoot.ToString().c_str());
             LogPrintf("new regnet genesis nonce: %s\n", std::to_string(genesis.nNonce));
             LogPrintf("new regnet genesis hash: %s\n", genesis.GetHash().ToString().c_str());

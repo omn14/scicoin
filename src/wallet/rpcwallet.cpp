@@ -449,7 +449,7 @@ UniValue sendtoaddress(const JSONRPCRequest& request)
     EnsureWalletIsUnlocked(pwallet);
 
     SendMoney(pwallet, address.Get(), nAmount, fSubtractFeeFromAmount, wtx);
-
+    
     return wtx.GetHash().GetHex();
 }
 
