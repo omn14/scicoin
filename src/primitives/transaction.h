@@ -6,6 +6,8 @@
 #ifndef SCICOIN_PRIMITIVES_TRANSACTION_H
 #define SCICOIN_PRIMITIVES_TRANSACTION_H
 
+#include "seis/seisio.h"
+
 #include "amount.h"
 #include "script/script.h"
 #include "serialize.h"
