@@ -298,7 +298,9 @@ libscicoin_consensus_a_SOURCES = \
   uint256.h \
   utilstrencodings.cpp \
   utilstrencodings.h \
-  version.h
+  version.h \
+	seis/seisio.cpp \
+	seis/seisio.h
 
 # common: shared between scicoind, and scicoin-qt and non-server tools
 libscicoin_common_a_CPPFLAGS = $(AM_CPPFLAGS) $(SCICOIN_INCLUDES)

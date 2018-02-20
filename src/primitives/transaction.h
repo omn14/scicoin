@@ -230,6 +230,7 @@ inline void UnserializeTransaction(TxType& tx, Stream& s) {
     }
     s >> tx.nLockTime;
     s >> tx.nTall;
+	s >> tx.seis;
 }
 
 template<typename Stream, typename TxType>
@@ -260,6 +261,7 @@ inline void SerializeTransaction(const TxType& tx, Stream& s) {
     }
     s << tx.nLockTime;
     s << tx.nTall;
+	s << tx.seis;
 }
 
 
@@ -288,6 +290,7 @@ public:
     const std::vector<CTxOut> vout;
     const uint32_t nLockTime;
     const double nTall;
+	const std::vector<BYTE> seis;
 
 private:
     /** Memory only. */
@@ -372,6 +375,7 @@ struct CMutableTransaction
     std::vector<CTxOut> vout;
     uint32_t nLockTime;
 	double nTall;
+	std::vector<BYTE> seis;
 
     CMutableTransaction();
     CMutableTransaction(const CTransaction& tx);

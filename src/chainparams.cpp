@@ -232,13 +232,13 @@ public:
         nDefaultPort = 17222;
         nPruneAfterHeight = 1000;
 
-        genesis = CreateGenesisBlock(1497789053, 3301594160, 0x207fffff, 1, 50 * COIN);
-
+        genesis = CreateGenesisBlock(1497789053, 330159417, 0x207fffff, 1, 50 * COIN);
+/*
 /////////
-/*	consensus.hashGenesisBlock = uint256S("0x01");
+	consensus.hashGenesisBlock = uint256S("0x01");
 	if (true && genesis.GetHash() != consensus.hashGenesisBlock)
         {
-            LogPrintf("recalculating params for mainnet.\n");
+            LogPrintf("recalculating params for testnet.\n");
             LogPrintf("old testnet genesis nonce: %s\n", std::to_string(genesis.nNonce));
             LogPrintf("old testnet genesis hash:  %s\n", consensus.hashGenesisBlock.ToString().c_str());
             // deliberately empty for loop finds nonce value.
@@ -248,19 +248,19 @@ public:
             LogPrintf("new testnet genesis merkle root: %s\n", genesis.hashMerkleRoot.ToString().c_str());
             LogPrintf("new testnet genesis nonce: %s\n", std::to_string(genesis.nNonce));
             LogPrintf("new testnet genesis hash: %s\n", genesis.GetHash().ToString().c_str());
- 	    printf("new regnet genesis merkle root: %s\n", genesis.hashMerkleRoot.ToString().c_str());
-            printf("new regnet genesis nonce: %s\n", std::to_string(genesis.nNonce));
+ 	    printf("new testnet genesis merkle root: %s\n", genesis.hashMerkleRoot.ToString().c_str());
+            printf("new testnet genesis nonce: %s\n", std::to_string(genesis.nNonce));
                 std::cout << std::to_string(genesis.nNonce) << std::endl;
-            printf("new regnet genesis hash: %s\n", genesis.GetHash().ToString().c_str());
+            printf("new testnet genesis hash: %s\n", genesis.GetHash().ToString().c_str());
 
 	}
-*/
 
+*/
         consensus.hashGenesisBlock = genesis.GetHash();
 //        assert(consensus.hashGenesisBlock == uint256S("0x00000000f70e6997720c5f2650c56898854ea071dfe36d7a8d2e1691fb2167b3"));
 //        assert(genesis.hashMerkleRoot == uint256S("0xf08a91c9956ab0717561c06a5f94bd8e2ab72585a5893a9d3649dd676aa77f95"));
-        assert(consensus.hashGenesisBlock == uint256S("0x65c9687a9684028822015801e614bf19ea8568f9ebd61bc5ed7f9f49935eba29"));
-        assert(genesis.hashMerkleRoot == uint256S("0xb815a5152e54143384f0839787eb4eecd0d93d586c50ba05dc6bc8b3e4ef2e3d"));
+        assert(consensus.hashGenesisBlock == uint256S("0x019be780c5ef3358753df32544bce05252f91a975dd32331f210cb60130fae64"));
+        assert(genesis.hashMerkleRoot == uint256S("0x816f7348e1a96af964a53f84df81e31ff427493c9763510148d5a1e4fc609939"));
 
 
 

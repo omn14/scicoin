@@ -47,7 +47,7 @@ void writeSeis(std::vector<BYTE> seismic, const char* filename){
 inp::inp(){
 
 	tall = 666;
-	seismic = readSeis("plane.su");
+	seismic = readSeis("/home/omnia/junk/plane3.su");
 
 }
 
