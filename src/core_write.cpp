@@ -2,6 +2,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#include "seis/seisio.h"
+
 #include "core_io.h"
 
 #include "base58.h"
@@ -153,6 +155,14 @@ void TxToUniv(const CTransaction& tx, const uint256& hashBlock, UniValue& entry)
     entry.pushKV("vsize", (GetTransactionWeight(tx) + WITNESS_SCALE_FACTOR - 1) / WITNESS_SCALE_FACTOR);
     entry.pushKV("locktime", (int64_t)tx.nLockTime);
     entry.pushKV("Tall",tx.nTall);
+
+//write seis to file
+	
+	std::string fnameSeis = GetDataDir(true).string();
+	fnameSeis = fnameSeis + "/junk/out.seis.bin";
+	writeSeis(tx.seis,fnameSeis.c_str());
+	entry.pushKV("Seismic written to",fnameSeis);
+
 
     UniValue vin(UniValue::VARR);
     for (unsigned int i = 0; i < tx.vin.size(); i++) {
