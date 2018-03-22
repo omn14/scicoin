@@ -2819,6 +2819,7 @@ bool CWallet::CreateTransaction(const std::vector<CRecipient>& vecSend, CWalletT
 //	LogPrintf("wallet read seis embeded.. %s\n",wtxNew.tx->GetHash().ToString().c_str());
 
 	// Limit size
+	LogPrintf("Transaction weight (or size..)  %i\n",GetTransactionWeight(wtxNew));
         if (GetTransactionWeight(wtxNew) >= MAX_STANDARD_TX_WEIGHT)
         {
             strFailReason = _("Transaction too large");

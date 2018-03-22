@@ -817,6 +817,7 @@ static bool AcceptToMemoryPoolWithTime(const CChainParams& chainparams, CTxMemPo
                         bool* pfMissingInputs, int64_t nAcceptTime, std::list<CTransactionRef>* plTxnReplaced,
                         bool fOverrideMempoolLimit, const CAmount nAbsurdFee)
 {
+LogPrintf("With time start\n");
     std::vector<COutPoint> coins_to_uncache;
     bool res = AcceptToMemoryPoolWorker(chainparams, pool, state, tx, fLimitFree, pfMissingInputs, nAcceptTime, plTxnReplaced, fOverrideMempoolLimit, nAbsurdFee, coins_to_uncache);
     if (!res) {
@@ -826,6 +827,7 @@ static bool AcceptToMemoryPoolWithTime(const CChainParams& chainparams, CTxMemPo
     // After we've (potentially) uncached entries, ensure our coins cache is still within its size limits
     CValidationState stateDummy;
     FlushStateToDisk(chainparams, stateDummy, FLUSH_STATE_PERIODIC);
+LogPrintf("With time end, og res= %b\n",res);
     return res;
 }
 
@@ -833,6 +835,8 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState &state, const CTransa
                         bool* pfMissingInputs, std::list<CTransactionRef>* plTxnReplaced,
                         bool fOverrideMempoolLimit, const CAmount nAbsurdFee)
 {
+//Ole edit: printing ...
+LogPrintf("MMMMMMMMMMMMMM: checking if accepted to mempool\n");
     const CChainParams& chainparams = Params();
     return AcceptToMemoryPoolWithTime(chainparams, pool, state, tx, fLimitFree, pfMissingInputs, GetTime(), plTxnReplaced, fOverrideMempoolLimit, nAbsurdFee);
 }
@@ -857,6 +861,7 @@ bool GetTransaction(const uint256 &hash, CTransactionRef &txOut, const Consensus
         txOut = ptx;
         return true;
     }
+	LogPrintf("..ptx.. not true... \n");
 
     if (fTxIndex) {
         CDiskTxPos postx;
