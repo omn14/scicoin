@@ -311,6 +311,9 @@ public:
     CTransaction(const CMutableTransaction &tx);
     CTransaction(CMutableTransaction &&tx);
 
+//Ole edit: alow spesific seismic file path
+	CTransaction(std::string seisPath, const CMutableTransaction &tx);
+
     template <typename Stream>
     inline void Serialize(Stream& s) const {
         SerializeTransaction(*this, s);
@@ -384,6 +387,10 @@ struct CMutableTransaction
 
     CMutableTransaction();
     CMutableTransaction(const CTransaction& tx);
+
+//Ole edit: constructor for creating transaction with custom seismic file path
+    CMutableTransaction(std::string seisPath);
+
 
     template <typename Stream>
     inline void Serialize(Stream& s) const {

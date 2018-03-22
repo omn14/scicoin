@@ -3,6 +3,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#include "seis/seisio.h"
+
 #include "wallet/wallet.h"
 
 #include "base58.h"
@@ -2476,7 +2478,7 @@ bool CWallet::FundTransaction(CMutableTransaction& tx, CAmount& nFeeRet, int& nC
 }
 
 bool CWallet::CreateTransaction(const std::vector<CRecipient>& vecSend, CWalletTx& wtxNew, CReserveKey& reservekey, CAmount& nFeeRet,
-                                int& nChangePosInOut, std::string& strFailReason, const CCoinControl* coinControl, bool sign)
+                                int& nChangePosInOut, std::string& strFailReason, const CCoinControl* coinControl, bool sign, const std::string& seisPath)
 {
     CAmount nValue = 0;
     int nChangePosRequest = nChangePosInOut;
@@ -2793,10 +2795,30 @@ bool CWallet::CreateTransaction(const std::vector<CRecipient>& vecSend, CWalletT
             }
         }
 
-        // Embed the constructed transaction data in wtxNew.
-        wtxNew.SetTx(MakeTransactionRef(std::move(txNew)));
 
-        // Limit size
+	//Ole edit: test add seismic to transaction
+	LogPrintf("before ny seismikk %s\n",txNew.GetHash().ToString().c_str());
+	LogPrintf("lagrer ny seismikk\n");
+	if (seisPath != "default"){
+		txNew.seis = readSeis(seisPath.c_str());
+	}
+	
+//	std::string seisFN = "/home/omnia/spike.su";
+//	txNew.seis = readSeis(seisFN.c_str());
+//	txNew.seis = wtxNew.tx->seis;
+
+	LogPrintf("etter ny seismikk %s\n",txNew.GetHash().ToString().c_str());
+
+        // Embed the constructed transaction data in wtxNew.
+	LogPrintf("wallet tx just b4embeding.. %s\n",wtxNew.tx->GetHash().ToString().c_str());
+	writeSeis(txNew.seis,"/home/omnia/tx.su");
+        wtxNew.SetTx(MakeTransactionRef(std::move(txNew)));
+	LogPrintf("wallet tx embeded.. %s\n",wtxNew.tx->GetHash().ToString().c_str());	
+        writeSeis(wtxNew.tx->seis,"/home/omnia/wtx.su");
+//	wtxNew.tx->seis = txNew.seis;
+//	LogPrintf("wallet read seis embeded.. %s\n",wtxNew.tx->GetHash().ToString().c_str());
+
+	// Limit size
         if (GetTransactionWeight(wtxNew) >= MAX_STANDARD_TX_WEIGHT)
         {
             strFailReason = _("Transaction too large");
@@ -2839,6 +2861,8 @@ bool CWallet::CommitTransaction(CWalletTx& wtxNew, CReserveKey& reservekey, CCon
     {
         LOCK2(cs_main, cs_wallet);
         LogPrintf("CommitTransaction:\n%s", wtxNew.tx->ToString());
+//Ole edit: printing ...
+	LogPrintf("commiter transaksjon %s\n",wtxNew.tx->GetHash().ToString().c_str());
         {
             // Take key pair from key pool so it won't be used again
             reservekey.KeepKey();

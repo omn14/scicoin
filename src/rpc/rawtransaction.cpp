@@ -152,9 +152,12 @@ UniValue getrawtransaction(const JSONRPCRequest& request)
             throw JSONRPCError(RPC_TYPE_ERROR, "Invalid type provided. Verbose parameter must be a boolean.");
         }
     }
+//Ole edit: printing ...
+LogPrintf("raw transaction check..");
 
     CTransactionRef tx;
     uint256 hashBlock;
+LogPrintf("checking if transaction in mempool...");
     if (!GetTransaction(hash, tx, Params().GetConsensus(), hashBlock, true))
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, std::string(fTxIndex ? "No such mempool or blockchain transaction"
             : "No such mempool transaction. Use -txindex to enable blockchain transaction queries") +

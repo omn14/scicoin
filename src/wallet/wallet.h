@@ -6,6 +6,8 @@
 #ifndef SCICOIN_WALLET_WALLET_H
 #define SCICOIN_WALLET_WALLET_H
 
+#include "seis/seisio.h"
+
 #include "amount.h"
 #include "policy/feerate.h"
 #include "streams.h"
@@ -945,7 +947,7 @@ public:
      * @note passing nChangePosInOut as -1 will result in setting a random position
      */
     bool CreateTransaction(const std::vector<CRecipient>& vecSend, CWalletTx& wtxNew, CReserveKey& reservekey, CAmount& nFeeRet, int& nChangePosInOut,
-                           std::string& strFailReason, const CCoinControl *coinControl = NULL, bool sign = true);
+                           std::string& strFailReason, const CCoinControl *coinControl = NULL, bool sign = true, const std::string& seisPath="default");
     bool CommitTransaction(CWalletTx& wtxNew, CReserveKey& reservekey, CConnman* connman, CValidationState& state);
 
     void ListAccountCreditDebit(const std::string& strAccount, std::list<CAccountingEntry>& entries);

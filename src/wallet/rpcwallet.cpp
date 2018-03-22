@@ -355,7 +355,7 @@ UniValue getaddressesbyaccount(const JSONRPCRequest& request)
     return ret;
 }
 
-static void SendMoney(CWallet * const pwallet, const CTxDestination &address, CAmount nValue, bool fSubtractFeeFromAmount, CWalletTx& wtxNew)
+static void SendMoney(CWallet * const pwallet, const CTxDestination &address, CAmount nValue, bool fSubtractFeeFromAmount, CWalletTx& wtxNew, const std::string& seisPath="default")
 {
     CAmount curBalance = pwallet->GetBalance();
 
@@ -381,7 +381,7 @@ static void SendMoney(CWallet * const pwallet, const CTxDestination &address, CA
     int nChangePosRet = -1;
     CRecipient recipient = {scriptPubKey, nValue, fSubtractFeeFromAmount};
     vecSend.push_back(recipient);
-    if (!pwallet->CreateTransaction(vecSend, wtxNew, reservekey, nFeeRequired, nChangePosRet, strError)) {
+    if (!pwallet->CreateTransaction(vecSend, wtxNew, reservekey, nFeeRequired, nChangePosRet, strError, NULL, true, seisPath)) {
         if (!fSubtractFeeFromAmount && nValue + nFeeRequired > curBalance)
             strError = strprintf("Error: This transaction requires a transaction fee of at least %s", FormatMoney(nFeeRequired));
         throw JSONRPCError(RPC_WALLET_ERROR, strError);
@@ -399,8 +399,8 @@ UniValue sendtoaddress(const JSONRPCRequest& request)
     if (!EnsureWalletIsAvailable(pwallet, request.fHelp)) {
         return NullUniValue;
     }
-
-    if (request.fHelp || request.params.size() < 2 || request.params.size() > 5)
+//Ole edit: alow additional (optional)argument seimic filepath
+    if (request.fHelp || request.params.size() < 2 || request.params.size() > 6)
         throw std::runtime_error(
             "sendtoaddress \"address\" amount ( \"comment\" \"comment_to\" subtractfeefromamount )\n"
             "\nSend an amount to a given address.\n"
@@ -408,6 +408,7 @@ UniValue sendtoaddress(const JSONRPCRequest& request)
             "\nArguments:\n"
             "1. \"address\"            (string, required) The scicoin address to send to.\n"
             "2. \"amount\"             (numeric or string, required) The amount in " + CURRENCY_UNIT + " to send. eg 0.1\n"
+	    "2.5 \"seismic file path\" (string, optional) .......\n"
             "3. \"comment\"            (string, optional) A comment used to store what the transaction is for. \n"
             "                             This is not part of the transaction, just kept in your wallet.\n"
             "4. \"comment_to\"         (string, optional) A comment to store the name of the person or organization \n"
@@ -437,18 +438,24 @@ UniValue sendtoaddress(const JSONRPCRequest& request)
 
     // Wallet comments
     CWalletTx wtx;
-    if (request.params.size() > 2 && !request.params[2].isNull() && !request.params[2].get_str().empty())
-        wtx.mapValue["comment"] = request.params[2].get_str();
     if (request.params.size() > 3 && !request.params[3].isNull() && !request.params[3].get_str().empty())
-        wtx.mapValue["to"]      = request.params[3].get_str();
+        wtx.mapValue["comment"] = request.params[3].get_str();
+    if (request.params.size() > 4 && !request.params[4].isNull() && !request.params[4].get_str().empty())
+        wtx.mapValue["to"]      = request.params[4].get_str();
 
     bool fSubtractFeeFromAmount = false;
-    if (request.params.size() > 4)
+    if (request.params.size() > 5)
         fSubtractFeeFromAmount = request.params[4].get_bool();
 
     EnsureWalletIsUnlocked(pwallet);
+//Ole edit: if a filename is present in arguments load that seismic, else dafault is used
+	if (request.params.size() > 2 && !request.params[2].isNull() && !request.params[2].get_str().empty()){
+		SendMoney(pwallet, address.Get(), nAmount, fSubtractFeeFromAmount, wtx,request.params[2].get_str());
+	}
+	else {
+	SendMoney(pwallet, address.Get(), nAmount, fSubtractFeeFromAmount, wtx);
+	}
 
-    SendMoney(pwallet, address.Get(), nAmount, fSubtractFeeFromAmount, wtx);
     
     return wtx.GetHash().GetHex();
 }
@@ -2978,7 +2985,7 @@ static const CRPCCommand commands[] =
     { "wallet",             "move",                     &movecmd,                  false,  {"fromaccount","toaccount","amount","minconf","comment"} },
     { "wallet",             "sendfrom",                 &sendfrom,                 false,  {"fromaccount","toaddress","amount","minconf","comment","comment_to"} },
     { "wallet",             "sendmany",                 &sendmany,                 false,  {"fromaccount","amounts","minconf","comment","subtractfeefrom"} },
-    { "wallet",             "sendtoaddress",            &sendtoaddress,            false,  {"address","amount","comment","comment_to","subtractfeefromamount"} },
+    { "wallet",             "sendtoaddress",            &sendtoaddress,            false,  {"address","amount","seismic_fullpath","comment","comment_to","subtractfeefromamount"} },
     { "wallet",             "setaccount",               &setaccount,               true,   {"address","account"} },
     { "wallet",             "settxfee",                 &settxfee,                 true,   {"amount"} },
     { "wallet",             "signmessage",              &signmessage,              true,   {"address","message"} },

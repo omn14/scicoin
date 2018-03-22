@@ -843,8 +843,15 @@ bool GetTransaction(const uint256 &hash, CTransactionRef &txOut, const Consensus
     CBlockIndex *pindexSlow = NULL;
 
     LOCK(cs_main);
+//Ole edit: printing...
+	LogPrintf("inside GetTransaction..b4 mempool.get(hash) \n");
 
     CTransactionRef ptx = mempool.get(hash);
+
+//Ole edit: printing ...
+	LogPrintf("inside function GetTransaction..ptx. \n");
+
+
     if (ptx)
     {
         txOut = ptx;

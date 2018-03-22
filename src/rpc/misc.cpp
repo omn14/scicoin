@@ -29,6 +29,16 @@
 
 #include <univalue.h>
 
+
+UniValue ole(const JSONRPCRequest& request)
+{
+	printf("Ole, Dole og Doffen!");
+	UniValue obj(UniValue::VOBJ);
+	obj.push_back(Pair("version", CLIENT_VERSION));
+	return obj;
+
+}
+
 /**
  * @note Do not add or change anything in the information returned by this
  * method. `getinfo` exists for backwards-compatibility only. It combines
@@ -638,6 +648,7 @@ UniValue echo(const JSONRPCRequest& request)
 static const CRPCCommand commands[] =
 { //  category              name                      actor (function)         okSafeMode
   //  --------------------- ------------------------  -----------------------  ----------
+    { "control",	    "ole",		      &ole,		       true,  {} }, /* Ole edit: experiment with adding rpc */
     { "control",            "getinfo",                &getinfo,                true,  {} }, /* uses wallet if enabled */
     { "control",            "getmemoryinfo",          &getmemoryinfo,          true,  {"mode"} },
     { "util",               "validateaddress",        &validateaddress,        true,  {"address"} }, /* uses wallet if enabled */
