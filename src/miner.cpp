@@ -193,6 +193,9 @@ std::unique_ptr<CBlockTemplate> BlockAssembler::CreateNewBlock(const CScript& sc
     uint64_t nSerializeSize = GetSerializeSize(*pblock, SER_NETWORK, PROTOCOL_VERSION);
     LogPrintf("CreateNewBlock(): total size: %u block weight: %u txs: %u fees: %ld sigops %d\n", nSerializeSize, GetBlockWeight(*pblock), nBlockTx, nFees, nBlockSigOpsCost);
 
+//Ole edit:
+	LogPrintf("new block! ;)");
+
     // Fill in header
     pblock->hashPrevBlock  = pindexPrev->GetBlockHash();
     UpdateTime(pblock, chainparams.GetConsensus(), pindexPrev);
@@ -431,6 +434,7 @@ void BlockAssembler::addPackageTxs(int &nPackagesSelected, int &nDescendantsUpda
             if (nConsecutiveFailed > MAX_CONSECUTIVE_FAILURES && nBlockWeight >
                     nBlockMaxWeight - 4000) {
                 // Give up if we're close to full and haven't succeeded in a while
+		LogPrintf("GGGGGGGGGG-- giving up, are full or tried too long nFailed: %i, weight: %i\n",nConsecutiveFailed,nBlockWeight);
                 break;
             }
             continue;
